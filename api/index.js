@@ -14,6 +14,6 @@ mongoose.connect(process.env.MONGO).then(() => {
 const app = express();
 
 app.listen(3000, () => {
-    console.log("Skynet might be running on port 3000");
+    console.log("Skynet msight be running on port 3000");
     }
 );
