@@ -7,7 +7,7 @@ import authRouter from './routes/auth.route.js';
 dotenv.config();
 
 mongoose.connect(process.env.MONGO).then(() => {
-    console.log("Mongo is !wsorking");
+    console.log("Mongo is working");
 }).catch((err) => {
     console.log("The error is:" + err);
 });
