@@ -1,5 +1,5 @@
 export const test = (req,res) => {
     res.json(
-        {message:"Api Route iss working"},
+        {message:"Api Route is working"},
     );
 }
