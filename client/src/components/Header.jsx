@@ -1,4 +1,8 @@
+// create the header that we will use in all pages
+
 import {FaSearch} from 'react-icons/fa';
+
+// import Link allows us to navigate from one page to another easily.
 import { Link } from 'react-router-dom';
 
 export default function Header() {

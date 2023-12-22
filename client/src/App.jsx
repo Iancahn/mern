@@ -1,3 +1,6 @@
+// install ReactRouterDOM so we can setup routes
+// once we created the Header component, we import the header into our browser router, so we can have the header on all pages
+
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 // import Pages
 import Home from './pages/Home';
@@ -10,6 +13,7 @@ import Header from './components/Header';
 
 export default function App() {
   return (
+    // we then cover everything with the browser router, routes and individual route(s)
     <BrowserRouter>
     <Header />
     <Routes>
