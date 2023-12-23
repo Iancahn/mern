@@ -34,7 +34,7 @@ const validUser = await User.findOne({email:email});
         if (!validUser) return next(errorHandler(404, "User not actually found!"));
         // to match the visible password entered by user with the stored hashed password, we use a special bcrypt function
         const validPassword = bcryptjs.compareSync(password, validUser.password);
-        if (!validPassword) return next(errrorHandler(401, "Wrong Credentials!"));
+        if (!validPassword) return next(errorHandler(401, "Wrong Credentials!"));
         // below we add a token we know a user with valid login creds is on the website, and if they need to make changes
         // the JWT secret is another way to salt the cookie
         const token = jwt.sign({id:validUser._id}, process.env.JWT_SECRET,);
