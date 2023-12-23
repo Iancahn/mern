@@ -31,10 +31,10 @@ export const signin = async (req, res, next) =>{
         // the line below checks if the user exists with our user.model in our database
         // after findone we have to specify what we are searching, and we could actually delete one of the "email" words in the findOne params after ES6?
 const validUser = await User.findOne({email:email});
-        if (!validUser) return next(errorHandler(404, "User not actually found!"));
+        if (!validUser) return next(errorHandler(404, "User not found!"));
         // to match the visible password entered by user with the stored hashed password, we use a special bcrypt function
         const validPassword = bcryptjs.compareSync(password, validUser.password);
-        if (!validPassword) return next(errorHandler(401, "Wrong Credentials!"));
+        if (!validPassword) return next(errorHandler(401, "Your email or password is incorrect!"));
         // below we add a token we know a user with valid login creds is on the website, and if they need to make changes
         // the JWT secret is another way to salt the cookie
         const token = jwt.sign({id:validUser._id}, process.env.JWT_SECRET,);
