@@ -55,6 +55,9 @@ app.use("/api/user", userRouter);
 
 app.use("/api/auth", authRouter);
 
+// below we use next to go to the next middleware
+// first var below is the err we send to the middleware
+// we use next to go to the next middleware
 app.use((err, req, res, next) =>{
     const statusCode = err.statusCode || 500;
     const message = err.message || "Internal Server Error";
