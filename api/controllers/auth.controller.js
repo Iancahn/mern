@@ -1,6 +1,7 @@
 import User from '../models/user.model.js';
 import bcryptjs from "bcryptjs";
 import {errorHandler} from '../utils/error.js';
+import jwt from 'jsonwebtoken';
 
 // this comment is tied into the SAVE function of a new user below, because we used AWAIT, we must use ASYNC to wait until new user has been saved
 export const signup = async (req,res, next) => {
@@ -24,8 +25,29 @@ export const signup = async (req,res, next) => {
     
     };
 
-// //test version
-// export const signup = (req, res) => {
-//    console.log(req.body);
-// };
+export const signin = async (req, res, next) =>{
+    const {email, password} = req.body;
+    try{
+        // the line below checks if the user exists with our user.model in our database
+        // after findone we have to specify what we are searching, and we could actually delete one of the "email" words in the findOne params after ES6?
+const validUser = await User.findOne({email:email});
+        if (!validUser) return next(errorHandler(404, "User not actually found!"));
+        // to match the visible password entered by user with the stored hashed password, we use a special bcrypt function
+        const validPassword = bcryptjs.compareSync(password, validUser.password);
+        if (!validPassword) return next(errrorHandler(401, "Wrong Credentials!"));
+        // below we add a token we know a user with valid login creds is on the website, and if they need to make changes
+        // the JWT secret is another way to salt the cookie
+        const token = jwt.sign({id:validUser._id}, process.env.JWT_SECRET,);
+        // below we "destructure" the data, because we dont want to send the password back to the user
+        const {password: pass, ...rest} = validUser._doc;
+        res
+        // below we actually create the cookie and insert our token into it
+        // the http only means no other application can use our cookie
+        .cookie('access_token', token, {httpOnly:true})
+        .status(200)
+        .json(rest)
+    } catch(error){
+        next(error);
+    }
+}
 
