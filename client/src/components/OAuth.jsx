@@ -1,8 +1,8 @@
-import React from 'react'
 import {GoogleAuthProvider, getAuth, signInWithPopup} from '@firebase/auth';
 import {app} from '../firebase';
 import { useDispatch } from 'react-redux';
 import { signInSuccess } from '../redux/user/userSlice';
+import {useNavigate} from 'react-router-dom';
 
 // FIREBASE SETUP
 // INSTALL NPM IN CLIENT FILE
@@ -17,6 +17,7 @@ import { signInSuccess } from '../redux/user/userSlice';
 // below we change the button type from default SUBMIT, to BUTTON, so its data doesnt get pushed through in the form
 export default function OAuth() {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const handleGoogleClick = async () => {
         try {
             const provider = new GoogleAuthProvider()
@@ -33,11 +34,12 @@ export default function OAuth() {
                 body: JSON.stringify({
                     name: result.user.displayName,
                     email: result.user.email,
-                    photo: result.user.photoURL
+                    photo: result.user.photoURL,
                 }),
             })
             const data = await res.json()
             dispatch(signInSuccess(data));
+            navigate('/');
                 } catch (error) {
             console.log('could not sign in with Google', error)
         }
