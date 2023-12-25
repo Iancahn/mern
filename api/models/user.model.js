@@ -22,7 +22,11 @@ const userSchema = new mongoose.Schema({
     password : {
         type:String,
         required:true,
-    }
+    },
+    avatar:{
+        type:String,
+        default: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+    },
 }, {timestamps:true});
 
 // once we created the Schema, we create the model, in this case called User, we create it in the singular form, and mongo will automatically add the (s) to user -> users

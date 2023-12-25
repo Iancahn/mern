@@ -49,5 +49,38 @@ const validUser = await User.findOne({email:email});
     } catch(error){
         next(error);
     }
+};
+
+
+// below we take our Google Signin data and see if we have a user like that in our DB, otherwise we have to create the user
+export const google = async (req, res, next) => {
+    try{
+        const user = await User.findOne({email: req.body.email})
+        if (user) {
+            // to create a new user, we need to create a token
+            // the JWT secret key i think was used to salt the user more?
+            const token = jwt.sign({ id:user._id}, processs.env.JWT_SECRET);
+            // we have to seperate password below
+            const { password: pass, ...rest} = user._doc;
+            // res below means response, creating the attributes below
+            res
+            .cookie('access_token', token, {httpOnly: true})
+            .status(200)
+            .json(rest)
+        } else {
+            // the toString 36 means alphabet 27 + numbers 9
+            // below we are generating an 8 + 8 = 16 letter password
+            const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+            const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
+            const newUser = new User({username: req.body.name.split(" ").join("").toLowerCase() + Math.random().toString(36).slice(-4), email: req.body.email, password: hashedPassword, avatar : req.body.imageUrl});
+            await newUser.save();
+            const token = jwt.sign({id: newUser._id}, process.env.JWT_SECRET);
+            const {password : pass, ...rest} = newUser._doc;
+            res.cookie('accesS_token', token, {httpOnly: true}).status(200).json(rest);
+        }
+
+    } catch (error){
+        next(error)
+    }
 }
 
