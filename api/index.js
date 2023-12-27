@@ -11,11 +11,16 @@
 // we will get express error of type module, because we use import in our backend index. So in our package.json, we added the type module
 // then we install nodemon , so our package.json will update to show nodemon in the dev script
 
+// we need to parse a cookie to update user info
+// we then install cookie-parser via NPM
+// we then need to initialize cookie-parser in the index.js file
+
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import userRouter from './routes/user.route.js';
 import authRouter from './routes/auth.route.js';
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -33,6 +38,7 @@ const app = express();
 //alow JSON as input on server
 
 app.use(express.json()); 
+app.use(cookieParser());
 
 app.listen(3000, () => {
     console.log("Skynet might be running on port 3000!");
